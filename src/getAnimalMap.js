@@ -1,39 +1,47 @@
 const data = require('../data/zoo_data');
-const { species } = require('../data/zoo_data');
+
+const { species } = data;
 
 function speciesSex(specie, options) {
+  const getSpecie = species.find(({ name }) => name === specie);
+  const { residents } = getSpecie;
+  const allSpecieResidents = {
+    [specie]: residents.map(({ name }) => name),
+  };
+
   if ('sex' in options) {
-    return specie.residents
-      .filter((resident) => resident.sex === options.sex)
-      .map((resident) => resident.name);
+    const allResidentsBySex = residents.filter((resident) => resident.sex === options.sex);
+    allSpecieResidents[specie] = allResidentsBySex.map((resident) => resident.name);
   }
-  return specie.residents.map((resident) => resident.name);
+  if ('sorted' in options) {
+    allSpecieResidents[specie].sort();
+  }
+  return allSpecieResidents;
 }
 
-function namesOfSpecies(options) {
-  if ('includeNames' in options) {
-    const coordinates = { NE: [], NW: [], SE: [], SW: [] };
-    species.forEach((specie) => {
-      const { name, location } = specie;
-      const animalNames = speciesSex(specie, options);
-      if ('sorted' in options) animalNames.sort();
-      coordinates[location].push({ [name]: animalNames });
-    });
-    return coordinates;
-  }
+function namesOfSpecies(coordinates, options) {
+  const speciesCoordinate = {};
+  const { NE, NW, SE, SW } = coordinates;
+  speciesCoordinate.NE = NE.map((specie) => speciesSex(specie, options));
+  speciesCoordinate.NW = NW.map((specie) => speciesSex(specie, options));
+  speciesCoordinate.SE = SE.map((specie) => speciesSex(specie, options));
+  speciesCoordinate.SW = SW.map((specie) => speciesSex(specie, options));
+  return speciesCoordinate;
 }
 
 function getAnimalMap(options) {
   // seu código aqui
-  if (options === undefined || options.includeNames === undefined) {
-    const coordinates = { NE: [], NW: [], SE: [], SW: [] };
-    species.forEach((specie) => {
-      const { name, location } = specie;
-      coordinates[location].push(name);
-    });
-    return coordinates;
+  const returnNames = {
+    NE: species.filter(({ location }) => location === 'NE').map(({ name }) => name),
+    NW: species.filter(({ location }) => location === 'NW').map(({ name }) => name),
+    SE: species.filter(({ location }) => location === 'SE').map(({ name }) => name),
+    SW: species.filter(({ location }) => location === 'SW').map(({ name }) => name),
+  };
+
+  if (!options || !options.includeNames) {
+    return returnNames;
   }
-  return namesOfSpecies(options);
+  return namesOfSpecies(returnNames, options);
 }
 
 module.exports = getAnimalMap;
