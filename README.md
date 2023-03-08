@@ -1,6 +1,7 @@
 # Zoo Functions
 
 Sétimo projeto desenvolvido no módulo de Fundamentos do Curso de Desenvolvimento Web da Trybe.
+, com informações a respeito dos animais presentes, colaboradores, horários de funcionamento do zoológico e uma tabela de preços que variavam de acordo com a idade do visitante.
 
 O projeto consistia em escrever HOF's, para consolidação de conceitos sobre funções, arrays e objetos em Javascript.
 
