@@ -26,4 +26,4 @@ Instala as dependências.
 
 * Para verificar se a sua função foi criada corretamente você pode instalar a extensão `code runner` no VSCode.
 
-* Utilize console.log() para testar as funções localmente.
+* Utilize **console.log()** para testar as funções localmente.
